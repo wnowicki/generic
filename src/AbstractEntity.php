@@ -105,6 +105,15 @@ abstract class AbstractEntity implements EntityInterface
 
     /**
      * @author WN
+     * @return string
+     */
+    function __toString()
+    {
+        return json_encode($this->toArray());
+    }
+
+    /**
+     * @author WN
      * @param string $property
      * @param array $arguments
      * @return $this
