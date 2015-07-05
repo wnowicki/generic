@@ -1,5 +1,5 @@
 # Entity
-Part of [wnowicki/generic](../README.md)
+Part of [wnowicki/generic](../)
 
 Entity is a concept of simple data handling object which is using getters and setters to work with internal properties. Also provides `toArray()` method which returns object properties as an `array`.
 
@@ -12,6 +12,9 @@ Methods name are build this way `setPropertyName()`. Camel case property name wi
 Methods name are build this way `getPropertyName()`. Camel case property name with prefix *get*.  
 **Input** Getters are taking no params.  
 **Return** Getters are returning value of property or `null` if not set.
+
+### To Array
+`EntityInterface` requires to implement `toArray()` method which will be returning an `array` representation of *entity* properties.
 
 ## Abstract Entity
 
@@ -35,6 +38,8 @@ class Person extends \WNowicki\Generic\AbstractEntity
 }
 ```
 
+`$properties` array is optional, if it's empty entity will accept any of property names.
+
 ### Creating New object
 
 ```php
@@ -45,4 +50,13 @@ $tester = Person::make(
         'age'        => 35,
     ]
 );
+```
+
+### toString
+
+AbstractEntity has `__toString()` method implemented. It'll return *JSON* string of `toArray()` output.
+
+```php
+echo $tester;
+// will return: {"first_name":"Jo","last_name":"Doe"}
 ```
