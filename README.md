@@ -14,11 +14,9 @@ Via Composer
 $ composer require wnowicki/generic
 ```
 
-## Usage
+## Components
 
-``` php
-
-```
+- [Entity](doc/Entity.md)
 
 ## Change log
 
