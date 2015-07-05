@@ -107,7 +107,7 @@ abstract class AbstractEntity implements EntityInterface
      * @author WN
      * @return string
      */
-    function __toString()
+    public function __toString()
     {
         return json_encode($this->toArray());
     }
