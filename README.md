@@ -20,6 +20,7 @@ $ composer require wnowicki/generic
 ## Components
 
 - [Entity](doc/Entity.md)
+- [API Client](doc/ApiClient.md)
 
 ## Change log
 
