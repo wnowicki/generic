@@ -46,7 +46,7 @@ trait PsrLoggerTrait
      */
     public function logAlert($message, array $context = array())
     {
-        //return $this->log(LogLevel::ALERT, $message, $context);
+        return $this->log(LogLevel::ALERT, $message, $context);
     }
 
     /**
