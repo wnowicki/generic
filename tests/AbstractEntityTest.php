@@ -55,12 +55,39 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(2, $entity->getTestField());
     }
 
-    public function testToArrayData()
+    public function testGetNull()
     {
         $entity = new DummyEntity();
 
-        $entity->setTestField(2);
-        $entity->setField(DummyEntity::make([]));
+        $this->assertNull($entity->getTestField());
+    }
+
+    public function testToString()
+    {
+        $entity = new DummyEntity();
+
+        $this->assertInternalType('string', '' . $entity);
+    }
+
+    public function testToStringIsJSON()
+    {
+        $entity = new DummyEntity();
+
+        $this->assertStringStartsWith('[', '' . $entity);
+        $this->assertStringEndsWith(']', '' . $entity);
+
+        $entity->setField('xde');
+
+        $this->assertStringStartsWith('{', '' . $entity);
+        $this->assertStringEndsWith('}', '' . $entity);
+    }
+
+    public function testToArrayData()
+    {
+        $entity = DummyEntity::make([
+            'test_field' => 2,
+            'field'      => DummyEntity::make([]),
+        ]);
 
         $this->assertInternalType('array', $entity->toArray());
         $this->assertArrayHasKey('field', $entity->toArray());

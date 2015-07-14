@@ -37,7 +37,7 @@ abstract class AbstractEntity implements EntityInterface
 
         foreach ($components as $k => $v) {
 
-            if (count($entity->properties) == 0 || in_array($k, $entity->properties)) {
+            if ($entity->isPropertyAllowed($k)) {
 
                 $entity->set($k, [$v]);
             }
@@ -57,7 +57,7 @@ abstract class AbstractEntity implements EntityInterface
         $action = substr($name, 0, 3);
         $property = $this->nameConverter(substr($name, 3));
 
-        if (count($this->properties) == 0 || in_array($property, $this->properties)) {
+        if ($this->isPropertyAllowed($property)) {
 
             switch ($action) {
                 case 'set':
@@ -111,6 +111,16 @@ abstract class AbstractEntity implements EntityInterface
         }
 
         return null;
+    }
+
+    /**
+     * @author WN
+     * @param string $property
+     * @return bool
+     */
+    private function isPropertyAllowed($property)
+    {
+        return (count($this->properties) == 0 || in_array($property, $this->properties));
     }
 
     /**

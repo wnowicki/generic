@@ -136,10 +136,7 @@ abstract class AbstractApiClient
     private function send(RequestInterface $request, array $body = [], array $query = [])
     {
         $options = $this->processRequestBody($body);
-
-        if (count($query) > 0) {
-            $options['query'] = $query;
-        }
+        $this->processQuery($query, $options);
 
         try {
 
@@ -176,6 +173,18 @@ abstract class AbstractApiClient
     protected function getLogger()
     {
         return $this->logger;
+    }
+
+    /**
+     * @author WN
+     * @param array $query
+     * @param array $options
+     */
+    private function processQuery(array $query, array &$options)
+    {
+        if (count($query) > 0) {
+            $options['query'] = $query;
+        }
     }
 
     /**
