@@ -1,3 +1,9 @@
+# v0.4.0
+2015-07-14
+
+## Features
+- Added logging to `AbstractApiClient`
+
 # v0.3.2
 2015-07-14
 
