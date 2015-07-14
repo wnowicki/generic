@@ -1,3 +1,9 @@
+# v0.3.2
+2015-07-14
+
+## Bug Fixes
+- Change scope of methods in `PsrLoggerTrait`
+
 # v0.3.1
 2015-07-14
 
