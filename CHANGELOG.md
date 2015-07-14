@@ -1,3 +1,9 @@
+# v0.3.0
+2015-07-14
+
+## Features
+- Added `PsrLoggerTrait`
+
 # v0.2.0
 2015-07-09
 
