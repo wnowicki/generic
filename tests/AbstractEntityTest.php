@@ -54,6 +54,20 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(2, $entity->getTestField());
     }
+
+    public function testToArrayData()
+    {
+        $entity = new DummyEntity();
+
+        $entity->setTestField(2);
+        $entity->setField(DummyEntity::make([]));
+
+        $this->assertInternalType('array', $entity->toArray());
+        $this->assertArrayHasKey('field', $entity->toArray());
+        $this->assertArrayHasKey('test_field', $entity->toArray());
+        $this->assertInternalType('array', $entity->toArray()['field']);
+        $this->assertInternalType('int', $entity->toArray()['test_field']);
+    }
 }
 
 class DummyEntity extends AbstractEntity
