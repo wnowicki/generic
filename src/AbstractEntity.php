@@ -59,14 +59,11 @@ abstract class AbstractEntity implements EntityInterface
 
         if (count($this->properties) == 0 || in_array($property, $this->properties)) {
 
-            if ($action == 'set') {
-
-                return $this->set($property, $arguments);
-            }
-
-            if ($action == 'get') {
-
-                return $this->get($property);
+            switch ($action) {
+                case 'set':
+                    return $this->set($property, $arguments);
+                case 'get':
+                    return $this->get($property);
             }
         }
 
@@ -87,20 +84,33 @@ abstract class AbstractEntity implements EntityInterface
         $rtn = [];
 
         foreach ($this->data as $k => $v) {
-
-            if (is_scalar($v) || is_array($v)) {
-
-                $rtn[$k] = $v;
-                continue;
-            }
-
-            if ($v instanceof EntityInterface) {
-
-                $rtn[$k] = $v->toArray();
-            }
+            $this->flattenProperty($k, $v, $rtn);
         }
 
         return $rtn;
+    }
+
+    /**
+     * @author WN
+     * @param string $k
+     * @param mixed $v
+     * @param array $rtn
+     * @return null
+     */
+    private function flattenProperty($k, $v, array &$rtn)
+    {
+        if (is_scalar($v) || is_array($v)) {
+
+            $rtn[$k] = $v;
+            return null;
+        }
+
+        if ($v instanceof EntityInterface) {
+
+            $rtn[$k] = $v->toArray();
+        }
+
+        return null;
     }
 
     /**

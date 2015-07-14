@@ -135,11 +135,7 @@ abstract class AbstractApiClient
      */
     private function send(RequestInterface $request, array $body = [], array $query = [])
     {
-        $options = [];
-
-        if (count($body) > 0) {
-            $options = $this->processRequestBody($body);
-        }
+        $options = $this->processRequestBody($body);
 
         if (count($query) > 0) {
             $options['query'] = $query;
