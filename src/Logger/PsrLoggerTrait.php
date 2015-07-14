@@ -33,7 +33,7 @@ trait PsrLoggerTrait
      * @param array $context
      * @return null
      */
-    public function logEmergency($message, array $context = [])
+    protected function logEmergency($message, array $context = [])
     {
         return $this->log(LogLevel::EMERGENCY, $message, $context);
     }
@@ -44,7 +44,7 @@ trait PsrLoggerTrait
      * @param array $context
      * @return null
      */
-    public function logAlert($message, array $context = array())
+    protected function logAlert($message, array $context = array())
     {
         return $this->log(LogLevel::ALERT, $message, $context);
     }
@@ -55,7 +55,7 @@ trait PsrLoggerTrait
      * @param array $context
      * @return null
      */
-    public function logCritical($message, array $context = array())
+    protected function logCritical($message, array $context = array())
     {
         return $this->log(LogLevel::CRITICAL, $message, $context);
     }
@@ -66,7 +66,7 @@ trait PsrLoggerTrait
      * @param array $context
      * @return null
      */
-    public function logError($message, array $context = array())
+    protected function logError($message, array $context = array())
     {
         return $this->log(LogLevel::ERROR, $message, $context);
     }
@@ -77,7 +77,7 @@ trait PsrLoggerTrait
      * @param array $context
      * @return null
      */
-    public function logWarning($message, array $context = array())
+    protected function logWarning($message, array $context = array())
     {
         return $this->log(LogLevel::WARNING, $message, $context);
     }
@@ -88,7 +88,7 @@ trait PsrLoggerTrait
      * @param array $context
      * @return null
      */
-    public function logNotice($message, array $context = array())
+    protected function logNotice($message, array $context = array())
     {
         return $this->log(LogLevel::NOTICE, $message, $context);
     }
@@ -99,7 +99,7 @@ trait PsrLoggerTrait
      * @param array $context
      * @return null
      */
-    public function logInfo($message, array $context = array())
+    protected function logInfo($message, array $context = array())
     {
         return $this->log(LogLevel::INFO, $message, $context);
     }
@@ -110,7 +110,7 @@ trait PsrLoggerTrait
      * @param array $context
      * @return null
      */
-    public function logDebug($message, array $context = array())
+    protected function logDebug($message, array $context = array())
     {
         return $this->log(LogLevel::DEBUG, $message, $context);
     }
