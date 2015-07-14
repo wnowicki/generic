@@ -56,7 +56,7 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 [ico-code-quality]: https://img.shields.io/scrutinizer/g/wnowicki/generic.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/wnowicki/generic.svg?style=flat-square
 
-[link-packagist]: https://packagist.org/packages/league/generic
+[link-packagist]: https://packagist.org/packages/wnowicki/generic
 [link-travis]: https://travis-ci.org/wnowicki/generic
 [link-scrutinizer]: https://scrutinizer-ci.com/g/wnowicki/generic/code-structure
 [link-code-quality]: https://scrutinizer-ci.com/g/wnowicki/generic
