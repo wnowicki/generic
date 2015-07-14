@@ -11,10 +11,14 @@
 namespace WNowicki\Generic\ApiClient;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Log\LoggerInterface;
+use WNowicki\Generic\Logger\PsrLoggerTrait;
 
 /**
  * Abstract Api Client
@@ -24,15 +28,20 @@ use Psr\Http\Message\ResponseInterface;
  */
 abstract class AbstractApiClient
 {
+    use PsrLoggerTrait;
+
     private $client;
+    private $logger;
 
     /**
      * @author WN
      * @param array $config
+     * @param LoggerInterface $logger
      */
-    public function __construct(array $config = [])
+    public function __construct(array $config = [], LoggerInterface $logger = null)
     {
         $this->client = new Client($config);
+        $this->logger = $logger;
     }
 
     /**
@@ -149,8 +158,55 @@ abstract class AbstractApiClient
             $this->processErrorResponse($e->getResponse());
 
             throw $e;
+
+        } catch (BadResponseException $e) {
+
+            $this->logError(
+                'Api Bad Response from [' . $request->getUri() . '] Failed[' . $e->getResponse()->getStatusCode() . ']',
+                [
+                    'message' => $e->getMessage(),
+                    'request' => [
+                        'headers'   => $e->getRequest()->getHeaders(),
+                        'body'      => $e->getRequest()->getBody()->getContents(),
+                        'method'    => $e->getRequest()->getMethod(),
+                        'uri'       => $e->getRequest()->getUri(),
+                    ],
+                    'response' => [
+                        'body'      => ($e->getResponse())?$e->getResponse()->getBody()->getContents():'[EMPTY]',
+                        'headers'   => ($e->getResponse())?$e->getResponse()->getHeaders():'[EMPTY]',
+                    ],
+                ]
+            );
+
+            throw $e;
+
+        } catch (RequestException $e) {
+
+            $this->logError(
+                'Api problem with request to [' . $request->getUri() . ']',
+                [
+                    'message' => $e->getMessage(),
+                    'request' => [
+                        'headers'   => $e->getRequest()->getHeaders(),
+                        'body'      => $e->getRequest()->getBody()->getContents(),
+                        'method'    => $e->getRequest()->getMethod(),
+                        'uri'       => $e->getRequest()->getUri(),
+                    ],
+                ]
+            );
+
+            throw $e;
         }
     }
+
+    /**
+     * @return \Psr\Log\LoggerInterface|null
+     */
+    protected function getLogger()
+    {
+        return $this->logger;
+    }
+
 
     /**
      * @author WN
