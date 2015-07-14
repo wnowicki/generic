@@ -11,9 +11,7 @@
 namespace WNowicki\Generic\ApiClient;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\BadResponseException;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Exception;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -153,48 +151,25 @@ abstract class AbstractApiClient
 
             return $this->processResponse($response);
 
-        } catch (ClientException $e) {
+        } catch (Exception\ClientException $e) {
 
             $this->processErrorResponse($e->getResponse());
-
             throw $e;
 
-        } catch (BadResponseException $e) {
+        } catch (Exception\BadResponseException $e) {
 
             $this->logError(
                 'Api Bad Response from [' . $request->getUri() . '] Failed[' . $e->getResponse()->getStatusCode() . ']',
-                [
-                    'message' => $e->getMessage(),
-                    'request' => [
-                        'headers'   => $e->getRequest()->getHeaders(),
-                        'body'      => $e->getRequest()->getBody()->getContents(),
-                        'method'    => $e->getRequest()->getMethod(),
-                        'uri'       => $e->getRequest()->getUri(),
-                    ],
-                    'response' => [
-                        'body'      => ($e->getResponse())?$e->getResponse()->getBody()->getContents():'[EMPTY]',
-                        'headers'   => ($e->getResponse())?$e->getResponse()->getHeaders():'[EMPTY]',
-                    ],
-                ]
+                $this->formatBadResponseException($e)
             );
-
             throw $e;
 
-        } catch (RequestException $e) {
+        } catch (Exception\RequestException $e) {
 
             $this->logError(
                 'Api problem with request to [' . $request->getUri() . ']',
-                [
-                    'message' => $e->getMessage(),
-                    'request' => [
-                        'headers'   => $e->getRequest()->getHeaders(),
-                        'body'      => $e->getRequest()->getBody()->getContents(),
-                        'method'    => $e->getRequest()->getMethod(),
-                        'uri'       => $e->getRequest()->getUri(),
-                    ],
-                ]
+                $this->formatRequestException($e)
             );
-
             throw $e;
         }
     }
@@ -207,13 +182,52 @@ abstract class AbstractApiClient
         return $this->logger;
     }
 
+    /**
+     * @author WN
+     * @param Exception\BadResponseException $e
+     * @return array
+     */
+    private function formatBadResponseException(Exception\BadResponseException $e)
+    {
+        return [
+            'message' => $e->getMessage(),
+            'request' => [
+                'headers'   => $e->getRequest()->getHeaders(),
+                'body'      => $e->getRequest()->getBody()->getContents(),
+                'method'    => $e->getRequest()->getMethod(),
+                'uri'       => $e->getRequest()->getUri(),
+            ],
+            'response' => [
+                'body'      => ($e->getResponse())?$e->getResponse()->getBody()->getContents():'[EMPTY]',
+                'headers'   => ($e->getResponse())?$e->getResponse()->getHeaders():'[EMPTY]',
+            ],
+        ];
+    }
+
+    /**
+     * @author WN
+     * @param Exception\RequestException $e
+     * @return array
+     */
+    private function formatRequestException(Exception\RequestException $e)
+    {
+        return [
+            'message' => $e->getMessage(),
+            'request' => [
+                'headers'   => $e->getRequest()->getHeaders(),
+                'body'      => $e->getRequest()->getBody()->getContents(),
+                'method'    => $e->getRequest()->getMethod(),
+                'uri'       => $e->getRequest()->getUri(),
+            ],
+        ];
+    }
 
     /**
      * @author WN
      * @param array $body
      * @return array
      */
-    protected abstract function processRequestBody(array $body);
+    abstract protected function processRequestBody(array $body);
 
     /**
      * @author WN
@@ -221,12 +235,12 @@ abstract class AbstractApiClient
      * @return array
      * @throws BadResponseException
      */
-    protected abstract function processResponse(ResponseInterface $response);
+    abstract protected function processResponse(ResponseInterface $response);
 
     /**
      * @author WN
      * @param ResponseInterface $response
      * @throws ErrorResponseException
      */
-    protected abstract function processErrorResponse(ResponseInterface $response);
+    abstract protected function processErrorResponse(ResponseInterface $response);
 }
