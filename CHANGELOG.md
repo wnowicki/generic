@@ -1,3 +1,6 @@
+# v0.5.0
+2015-07-18
+
 ## Features
 - Quality improvements
 - Testing
