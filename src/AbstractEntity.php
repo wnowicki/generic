@@ -37,7 +37,7 @@ abstract class AbstractEntity implements EntityInterface
 
         foreach ($components as $k => $v) {
 
-            if (count($entity->properties) == 0 || in_array($k, $entity->properties)) {
+            if ($entity->isPropertyAllowed($k)) {
 
                 $entity->set($k, [$v]);
             }
@@ -57,16 +57,13 @@ abstract class AbstractEntity implements EntityInterface
         $action = substr($name, 0, 3);
         $property = $this->nameConverter(substr($name, 3));
 
-        if (count($this->properties) == 0 || in_array($property, $this->properties)) {
+        if ($this->isPropertyAllowed($property)) {
 
-            if ($action == 'set') {
-
-                return $this->set($property, $arguments);
-            }
-
-            if ($action == 'get') {
-
-                return $this->get($property);
+            switch ($action) {
+                case 'set':
+                    return $this->set($property, $arguments);
+                case 'get':
+                    return $this->get($property);
             }
         }
 
@@ -87,20 +84,43 @@ abstract class AbstractEntity implements EntityInterface
         $rtn = [];
 
         foreach ($this->data as $k => $v) {
-
-            if (is_scalar($v) || is_array($v)) {
-
-                $rtn[$k] = $v;
-                continue;
-            }
-
-            if ($v instanceof EntityInterface) {
-
-                $rtn[$k] = $v->toArray();
-            }
+            $this->flattenProperty($k, $v, $rtn);
         }
 
         return $rtn;
+    }
+
+    /**
+     * @author WN
+     * @param string $k
+     * @param mixed $v
+     * @param array $rtn
+     * @return null
+     */
+    private function flattenProperty($k, $v, array &$rtn)
+    {
+        if (is_scalar($v) || is_array($v)) {
+
+            $rtn[$k] = $v;
+            return null;
+        }
+
+        if ($v instanceof EntityInterface) {
+
+            $rtn[$k] = $v->toArray();
+        }
+
+        return null;
+    }
+
+    /**
+     * @author WN
+     * @param string $property
+     * @return bool
+     */
+    private function isPropertyAllowed($property)
+    {
+        return (count($this->properties) == 0 || in_array($property, $this->properties));
     }
 
     /**
