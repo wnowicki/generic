@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace WNowicki\Generic;
+namespace WNowicki\Generic\Contracts;
 
 /**
  * Entity Interface
@@ -16,14 +16,6 @@ namespace WNowicki\Generic;
  * @author  WN
  * @package WNowicki\Generic
  */
-interface EntityInterface
+interface Entity extends Arrayable
 {
-    /**
-     * To Array
-     *
-     * Return flatten (arrays of scalars (+ null)???) representation of Entity
-     *
-     * @return array
-     */
-    public function toArray();
 }

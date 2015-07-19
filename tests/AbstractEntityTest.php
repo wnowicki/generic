@@ -25,13 +25,13 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
         $entity = new DummyEntity();
 
         $this->assertInstanceOf('WNowicki\Generic\AbstractEntity', $entity);
-        $this->assertInstanceOf('WNowicki\Generic\EntityInterface', $entity);
+        $this->assertInstanceOf('WNowicki\Generic\Contracts\Entity', $entity);
     }
 
     public function testMake()
     {
         $this->assertInstanceOf('WNowicki\Generic\AbstractEntity', DummyEntity::make([]));
-        $this->assertInstanceOf('WNowicki\Generic\EntityInterface', DummyEntity::make([]));
+        $this->assertInstanceOf('WNowicki\Generic\Contracts\Entity', DummyEntity::make([]));
     }
 
     public function testToArray()
@@ -92,7 +92,7 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $entity->toArray());
         $this->assertArrayHasKey('field', $entity->toArray());
         $this->assertArrayHasKey('test_field', $entity->toArray());
-        $this->assertInternalType('array', $entity->toArray()['field']);
+        $this->assertInternalType('array', $entity->toArray(true)['field']);
         $this->assertInternalType('int', $entity->toArray()['test_field']);
     }
 }

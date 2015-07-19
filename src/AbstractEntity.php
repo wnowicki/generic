@@ -10,6 +10,9 @@
 
 namespace WNowicki\Generic;
 
+use WNowicki\Generic\Contracts\Arrayable;
+use WNowicki\Generic\Contracts\Entity;
+
 /**
  * Abstract Entity
  *
@@ -18,7 +21,7 @@ namespace WNowicki\Generic;
  *
  * @package WNowicki\Generic
  */
-abstract class AbstractEntity implements EntityInterface
+abstract class AbstractEntity implements Entity
 {
     private $data = [];
 
@@ -73,44 +76,25 @@ abstract class AbstractEntity implements EntityInterface
     /**
      * To Array
      *
-     * This implementation handles automatically Scalars, Arrays and EntityInterface. Everything else is ignored.
-     * Return flatten (arrays of scalars (+ null)???) representation of Entity
-     *
      * @author WN
+     * @param bool $recursively If set to `true` then toArray(true) will be called on each `Arrayable` property
      * @return array
      */
-    public function toArray()
+    public function toArray($recursively = false)
     {
         $rtn = [];
 
         foreach ($this->data as $k => $v) {
-            $this->flattenProperty($k, $v, $rtn);
+
+            if ($recursively && $v instanceof Arrayable) {
+                $rtn[$k] = $v->toArray(true);
+                continue;
+            }
+
+            $rtn[$k] = $v;
         }
 
         return $rtn;
-    }
-
-    /**
-     * @author WN
-     * @param string $k
-     * @param mixed $v
-     * @param array $rtn
-     * @return null
-     */
-    private function flattenProperty($k, $v, array &$rtn)
-    {
-        if (is_scalar($v) || is_array($v)) {
-
-            $rtn[$k] = $v;
-            return null;
-        }
-
-        if ($v instanceof EntityInterface) {
-
-            $rtn[$k] = $v->toArray();
-        }
-
-        return null;
     }
 
     /**
@@ -129,7 +113,7 @@ abstract class AbstractEntity implements EntityInterface
      */
     public function __toString()
     {
-        return json_encode($this->toArray());
+        return json_encode($this->toArray(true));
     }
 
     /**
