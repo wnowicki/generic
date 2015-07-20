@@ -20,7 +20,7 @@ use WNowicki\Generic\ApiClient\ApiClient;
  */
 class AbstractApiClientTest extends \PHPUnit_Framework_TestCase
 {
-    public function testBadResponse()
+    public function testClientException()
     {
         $api = ApiClient::make('http://httpbin.org/status/418');
 
@@ -43,6 +43,15 @@ class AbstractApiClientTest extends \PHPUnit_Framework_TestCase
         $api = ApiClient::make('htctp://httpbin.org/xml');
 
         $this->setExpectedException('GuzzleHttp\Exception\RequestException');
+
+        $api->get('');
+    }
+
+    public function testBadResponse()
+    {
+        $api = ApiClient::make('http://httpbin.org/status/500');
+
+        $this->setExpectedException('GuzzleHttp\Exception\BadResponseException');
 
         $api->get('');
     }

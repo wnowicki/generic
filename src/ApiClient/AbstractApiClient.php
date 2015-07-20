@@ -139,9 +139,7 @@ abstract class AbstractApiClient
         $this->processQuery($query, $options);
 
         try {
-
             $response = $this->client->send($request, $options);
-
             return $this->processResponse($response);
 
         } catch (Exception\ClientException $e) {
