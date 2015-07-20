@@ -34,7 +34,7 @@ class ApiClient extends AbstractApiClient
      * @author WN
      * @param ResponseInterface $response
      * @return array
-     * @throws BadResponseException
+     * @throws WrongResponseException
      */
     protected function processResponse(ResponseInterface $response)
     {
@@ -43,7 +43,7 @@ class ApiClient extends AbstractApiClient
             return $responseBody;
         }
 
-        throw new BadResponseException('Response body was malformed JSON', $response->getStatusCode());
+        throw new WrongResponseException('Response body was malformed JSON', $response->getStatusCode());
     }
 
     /**

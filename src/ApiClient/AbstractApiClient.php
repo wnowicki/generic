@@ -238,7 +238,7 @@ abstract class AbstractApiClient
      * @author WN
      * @param ResponseInterface $response
      * @return array
-     * @throws BadResponseException
+     * @throws WrongResponseException
      */
     abstract protected function processResponse(ResponseInterface $response);
 

@@ -10,14 +10,14 @@
 
 namespace WNowicki\Generic\ApiClient;
 
+use WNowicki\Generic\Exception;
+
 /**
- * Error Response Exception
- *
- * Server returned standard error with meaningful message.
+ * Api Client Response Exception
  *
  * @author WN
  * @package WNowicki\Generic\ApiClient
  */
-class ErrorResponseException extends ApiClientException
+class ApiClientException extends Exception
 {
 }
