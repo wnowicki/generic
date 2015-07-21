@@ -176,15 +176,15 @@ abstract class AbstractEntity implements Entity, Makeable, Jsonable
     /**
      * @author WN
      * @param mixed $value
-     * @param string|int $type
+     * @param string|int $property
      * @return mixed
      * @throws Exception
      * @throws InvalidArgumentException
      */
-    private function processInputValue($value, $type)
+    private function processInputValue($value, $property)
     {
-        if (array_key_exists($type, $this->properties)) {
-
+        if (array_key_exists($property, $this->properties)) {
+            $type = $this->properties[$property];
             if ($this->isInternalType($type)) {
 
                 return $this->processInternalType($value, $type);
@@ -228,31 +228,36 @@ abstract class AbstractEntity implements Entity, Makeable, Jsonable
 
     /**
      * @param mixed $value
-     * @param string $type
+     * @param string $class
      * @return object mixed
      * @throws Exception
      * @throws InvalidArgumentException
      */
-    private function processObjectType($value, $type)
+    private function processObjectType($value, $class)
     {
-        if (!class_exists($type)) {
+        $this->classExists($class);
 
-            throw new Exception('Non existing class');
+        if (is_array($value) && is_subclass_of($class, 'WNowicki\Generic\Contracts\Makeable')) {
+
+            return $class::make($value);
         }
 
-        if (is_array($value) && is_subclass_of($type, 'WNowicki\Generic\Contracts\Makeable')) {
-
-            return $type::make($value);
-        }
-
-        if (is_a($value, $type)) {
+        if (is_a($value, $class)) {
 
             return $value;
         }
 
         throw new InvalidArgumentException(
-            'Expected value to be object of [' . $type . '] type ' . $this->checkType($value) . '] was given'
+            'Expected value to be object of [' . $class . '] type ' . $this->checkType($value) . '] was given'
         );
+    }
+
+    private function classExists($class)
+    {
+        if (!class_exists($class)) {
+            return true;
+        }
+        throw new Exception('Non existing class');
     }
 
     /**
