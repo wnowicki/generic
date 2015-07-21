@@ -42,7 +42,7 @@ abstract class AbstractEntity implements Entity
 
             if ($entity->isPropertyAllowed($k)) {
 
-                $entity->set($k, [$v]);
+                $entity->{'set' . $entity->snakeToCamel($k)}($v);
             }
         }
 
@@ -58,7 +58,7 @@ abstract class AbstractEntity implements Entity
     public function __call($name, $arguments)
     {
         $action = substr($name, 0, 3);
-        $property = $this->nameConverter(substr($name, 3));
+        $property = $this->camelToSnake(substr($name, 3));
 
         if ($this->isPropertyAllowed($property)) {
 
@@ -151,12 +151,22 @@ abstract class AbstractEntity implements Entity
 
     /**
      * @author WN
-     * @param string $name
+     * @param string $string
      * @return string
      */
-    private function nameConverter($name)
+    private function camelToSnake($string)
     {
-        $name[0] = strtolower($name[0]);
-        return strtolower(preg_replace("/([A-Z])/", "_$1", $name));
+        $string[0] = strtolower($string[0]);
+        return strtolower(preg_replace("/([A-Z])/", "_$1", $string));
+    }
+
+    /**
+     * @author WN
+     * @param $string
+     * @return mixed
+     */
+    private function snakeToCamel($string)
+    {
+        return str_replace(' ', '', ucwords(str_replace('_', ' ', $string)));
     }
 }
