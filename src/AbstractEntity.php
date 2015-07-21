@@ -254,7 +254,7 @@ abstract class AbstractEntity implements Entity, Makeable, Jsonable
 
     private function classExists($class)
     {
-        if (!class_exists($class)) {
+        if (class_exists($class)) {
             return true;
         }
         throw new Exception('Non existing class');
