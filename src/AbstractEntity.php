@@ -73,8 +73,9 @@ abstract class AbstractEntity implements Entity, Makeable, Jsonable
         }
 
         trigger_error('Call to undefined method '.__CLASS__.'::'.$name.'()', E_USER_ERROR);
-        return null;
+// @codeCoverageIgnoreStart
     }
+// @codeCoverageIgnoreEnd
 
     /**
      * To Array
@@ -141,8 +142,9 @@ abstract class AbstractEntity implements Entity, Makeable, Jsonable
         if (count($arguments) == 0) {
 
             trigger_error('Missing argument on method ' . __CLASS__ . '::set_' . $property . '() call', E_USER_ERROR);
-            return null;
+// @codeCoverageIgnoreStart
         }
+// @codeCoverageIgnoreEnd
 
         $this->data[$property] = $arguments[0];
 
