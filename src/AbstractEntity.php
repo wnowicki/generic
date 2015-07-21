@@ -12,6 +12,8 @@ namespace WNowicki\Generic;
 
 use WNowicki\Generic\Contracts\Arrayable;
 use WNowicki\Generic\Contracts\Entity;
+use WNowicki\Generic\Contracts\Jsonable;
+use WNowicki\Generic\Contracts\Makeable;
 
 /**
  * Abstract Entity
@@ -21,7 +23,7 @@ use WNowicki\Generic\Contracts\Entity;
  *
  * @package WNowicki\Generic
  */
-abstract class AbstractEntity implements Entity
+abstract class AbstractEntity implements Entity, Makeable, Jsonable
 {
     private $data = [];
 
@@ -113,7 +115,18 @@ abstract class AbstractEntity implements Entity
      */
     public function __toString()
     {
-        return json_encode($this->toArray(true));
+        return $this->toJson();
+    }
+
+    /**
+     * JSON representation of an object
+     *
+     * @param  int $options
+     * @return string
+     */
+    public function toJson($options = 0)
+    {
+        return json_encode($this->toArray(true), $options);
     }
 
     /**
