@@ -111,6 +111,21 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
         restore_error_handler();
     }
 
+    public function testMissingArgumentOnSet()
+    {
+        set_error_handler([$this, 'entityErrorHandler']);
+
+        $this->setExpectedException(
+            '\Exception',
+            'Missing argument on method WNowicki\Generic\AbstractEntity::set_field() call'
+        );
+
+        $entity = new DummyEntity();
+        $entity->setField();
+
+        restore_error_handler();
+    }
+
     public function testGetNonExistingProperty()
     {
         set_error_handler([$this, 'entityErrorHandler']);
