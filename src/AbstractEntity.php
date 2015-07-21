@@ -70,7 +70,9 @@ abstract class AbstractEntity implements Entity, Makeable, Jsonable
                 case 'get':
                     return $this->get($property);
             }
+// @codeCoverageIgnoreStart
         }
+// @codeCoverageIgnoreEnd
 
         trigger_error('Call to undefined method '.__CLASS__.'::'.$name.'()', E_USER_ERROR);
 // @codeCoverageIgnoreStart
