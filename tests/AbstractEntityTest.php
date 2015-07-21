@@ -95,6 +95,41 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $entity->toArray(true)['field']);
         $this->assertInternalType('int', $entity->toArray()['test_field']);
     }
+
+    public function testSetNonExistingProperty()
+    {
+        set_error_handler([$this, 'entityErrorHandler']);
+
+        $this->setExpectedException(
+            '\Exception',
+            'Call to undefined method WNowicki\Generic\AbstractEntity::setNonExisting()'
+        );
+
+        $entity = new DummyEntity();
+        $entity->setNonExisting();
+
+        restore_error_handler();
+    }
+
+    public function testGetNonExistingProperty()
+    {
+        set_error_handler([$this, 'entityErrorHandler']);
+
+        $this->setExpectedException(
+            '\Exception',
+            'Call to undefined method WNowicki\Generic\AbstractEntity::getNonExisting()'
+        );
+
+        $entity = new DummyEntity();
+        $entity->getNonExisting();
+
+        restore_error_handler();
+    }
+
+    function entityErrorHandler($errno, $errstr, $errfile, $errline)
+    {
+        throw new \Exception($errstr);
+    }
 }
 
 class DummyEntity extends AbstractEntity
