@@ -1,5 +1,6 @@
 ## Features
 - Quality improvements
+- Added types to `AbstractEntity`
 - Testing
  - `AbstractEntityTest`
  - `ApiClientTest`
