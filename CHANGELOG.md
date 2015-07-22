@@ -1,3 +1,10 @@
+# v0.6.2
+2015-07-22
+
+## Bug Fixes
+- `AbstractEntity` fixed `null` value on `make()`
+- Additional tests for `AbstractEntity`
+
 # v0.6.1
 2015-07-22
 
