@@ -159,6 +159,12 @@ abstract class AbstractEntity implements Entity, Makeable, Jsonable
         }
 // @codeCoverageIgnoreEnd
 
+        if ($arguments[0] == null) {
+
+            $this->data[$property] = null;
+            return $this;
+        }
+
         $this->data[$property] = $this->processInputValue($arguments[0], $property);
 
         return $this;
@@ -223,7 +229,7 @@ abstract class AbstractEntity implements Entity, Makeable, Jsonable
     {
         if ($this->validateInternalType($value, $type)) {
 
-            return $type;
+            return $value;
         }
 
         throw new InvalidArgumentException(

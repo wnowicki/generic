@@ -1,3 +1,10 @@
+# v0.6.1
+2015-07-22
+
+## Bug Fixes
+- `AbstractEntity` accepts `null` for every type
+- Stored `type` instead of `value` for *internal type* properties
+
 # v0.6.0
 2015-07-22
 
