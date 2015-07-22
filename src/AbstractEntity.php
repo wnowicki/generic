@@ -10,6 +10,11 @@
 
 namespace WNowicki\Generic;
 
+use WNowicki\Generic\Contracts\Arrayable;
+use WNowicki\Generic\Contracts\Entity;
+use WNowicki\Generic\Contracts\Jsonable;
+use WNowicki\Generic\Contracts\Makeable;
+
 /**
  * Abstract Entity
  *
@@ -18,7 +23,7 @@ namespace WNowicki\Generic;
  *
  * @package WNowicki\Generic
  */
-abstract class AbstractEntity implements EntityInterface
+abstract class AbstractEntity implements Entity, Makeable, Jsonable
 {
     private $data = [];
 
@@ -39,7 +44,7 @@ abstract class AbstractEntity implements EntityInterface
 
             if ($entity->isPropertyAllowed($k)) {
 
-                $entity->set($k, [$v]);
+                $entity->{'set' . $entity->snakeToCamel($k)}($v);
             }
         }
 
@@ -55,7 +60,7 @@ abstract class AbstractEntity implements EntityInterface
     public function __call($name, $arguments)
     {
         $action = substr($name, 0, 3);
-        $property = $this->nameConverter(substr($name, 3));
+        $property = $this->camelToSnake(substr($name, 3));
 
         if ($this->isPropertyAllowed($property)) {
 
@@ -65,52 +70,37 @@ abstract class AbstractEntity implements EntityInterface
                 case 'get':
                     return $this->get($property);
             }
+// @codeCoverageIgnoreStart
         }
+// @codeCoverageIgnoreEnd
 
         trigger_error('Call to undefined method '.__CLASS__.'::'.$name.'()', E_USER_ERROR);
+// @codeCoverageIgnoreStart
     }
+// @codeCoverageIgnoreEnd
 
     /**
      * To Array
      *
-     * This implementation handles automatically Scalars, Arrays and EntityInterface. Everything else is ignored.
-     * Return flatten (arrays of scalars (+ null)???) representation of Entity
-     *
      * @author WN
+     * @param bool $recursively If set to `true` then toArray(true) will be called on each `Arrayable` property
      * @return array
      */
-    public function toArray()
+    public function toArray($recursively = false)
     {
         $rtn = [];
 
         foreach ($this->data as $k => $v) {
-            $this->flattenProperty($k, $v, $rtn);
+
+            if ($recursively && $v instanceof Arrayable) {
+                $rtn[$k] = $v->toArray(true);
+                continue;
+            }
+
+            $rtn[$k] = $v;
         }
 
         return $rtn;
-    }
-
-    /**
-     * @author WN
-     * @param string $k
-     * @param mixed $v
-     * @param array $rtn
-     * @return null
-     */
-    private function flattenProperty($k, $v, array &$rtn)
-    {
-        if (is_scalar($v) || is_array($v)) {
-
-            $rtn[$k] = $v;
-            return null;
-        }
-
-        if ($v instanceof EntityInterface) {
-
-            $rtn[$k] = $v->toArray();
-        }
-
-        return null;
     }
 
     /**
@@ -129,7 +119,18 @@ abstract class AbstractEntity implements EntityInterface
      */
     public function __toString()
     {
-        return json_encode($this->toArray());
+        return $this->toJson();
+    }
+
+    /**
+     * JSON representation of an object
+     *
+     * @param  int $options
+     * @return string
+     */
+    public function toJson($options = 0)
+    {
+        return json_encode($this->toArray(true), $options);
     }
 
     /**
@@ -143,7 +144,9 @@ abstract class AbstractEntity implements EntityInterface
         if (count($arguments) == 0) {
 
             trigger_error('Missing argument on method ' . __CLASS__ . '::set_' . $property . '() call', E_USER_ERROR);
+// @codeCoverageIgnoreStart
         }
+// @codeCoverageIgnoreEnd
 
         $this->data[$property] = $arguments[0];
 
@@ -167,12 +170,22 @@ abstract class AbstractEntity implements EntityInterface
 
     /**
      * @author WN
-     * @param string $name
+     * @param string $string
      * @return string
      */
-    private function nameConverter($name)
+    private function camelToSnake($string)
     {
-        $name[0] = strtolower($name[0]);
-        return strtolower(preg_replace("/([A-Z])/", "_$1", $name));
+        $string[0] = strtolower($string[0]);
+        return strtolower(preg_replace("/([A-Z])/", "_$1", $string));
+    }
+
+    /**
+     * @author WN
+     * @param $string
+     * @return mixed
+     */
+    private function snakeToCamel($string)
+    {
+        return str_replace(' ', '', ucwords(str_replace('_', ' ', $string)));
     }
 }

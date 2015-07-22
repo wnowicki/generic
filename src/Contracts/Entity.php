@@ -8,16 +8,14 @@
  * file that was distributed with this source code.
  */
 
-namespace WNowicki\Generic\ApiClient;
+namespace WNowicki\Generic\Contracts;
 
 /**
- * Error Response Exception
+ * Entity Interface
  *
- * Server returned standard error with meaningful message.
- *
- * @author WN
- * @package WNowicki\Generic\ApiClient
+ * @author  WN
+ * @package WNowicki\Generic
  */
-class ErrorResponseException extends ApiClientException
+interface Entity extends Arrayable
 {
 }

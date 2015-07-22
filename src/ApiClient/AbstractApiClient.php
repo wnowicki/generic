@@ -139,9 +139,7 @@ abstract class AbstractApiClient
         $this->processQuery($query, $options);
 
         try {
-
             $response = $this->client->send($request, $options);
-
             return $this->processResponse($response);
 
         } catch (Exception\ClientException $e) {
@@ -238,7 +236,7 @@ abstract class AbstractApiClient
      * @author WN
      * @param ResponseInterface $response
      * @return array
-     * @throws BadResponseException
+     * @throws WrongResponseException
      */
     abstract protected function processResponse(ResponseInterface $response);
 
