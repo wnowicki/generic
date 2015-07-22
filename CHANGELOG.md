@@ -1,15 +1,23 @@
+# v0.6.0
+2015-07-22
+
 ## Features
-- Quality improvements
 - Added types to `AbstractEntity`
-- Testing
- - `AbstractEntityTest`
- - `ApiClientTest`
 - New contracts:
  - `Arrayable`
  - `Jsonable`
  - `Makeable`
 - `AbstractEntity` improvements
 - Code coverage
+
+# v0.5.0
+2015-07-18
+
+## Features
+- Quality improvements
+- Testing
+ - `AbstractEntityTest`
+ - `ApiClientTest`
 
 # v0.4.0
 2015-07-14
