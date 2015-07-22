@@ -14,6 +14,7 @@ use WNowicki\Generic\Contracts\Arrayable;
 use WNowicki\Generic\Contracts\Entity;
 use WNowicki\Generic\Contracts\Jsonable;
 use WNowicki\Generic\Contracts\Makeable;
+use WNowicki\Generic\Exceptions\InvalidArgumentException;
 
 /**
  * Abstract Entity
@@ -25,6 +26,12 @@ use WNowicki\Generic\Contracts\Makeable;
  */
 abstract class AbstractEntity implements Entity, Makeable, Jsonable
 {
+    const TYPE_ARRAY = 1;
+    const TYPE_BOOL = 2;
+    const TYPE_INT = 4;
+    const TYPE_STRING = 8;
+    const TYPE_FLOAT = 16;
+
     private $data = [];
 
     protected $properties = [];
@@ -110,7 +117,11 @@ abstract class AbstractEntity implements Entity, Makeable, Jsonable
      */
     private function isPropertyAllowed($property)
     {
-        return (count($this->properties) == 0 || in_array($property, $this->properties));
+        return (
+            count($this->properties) == 0 ||
+            in_array($property, $this->properties) ||
+            array_key_exists($property, $this->properties)
+        );
     }
 
     /**
@@ -139,7 +150,7 @@ abstract class AbstractEntity implements Entity, Makeable, Jsonable
      * @param array $arguments
      * @return $this
      */
-    protected function set($property, $arguments)
+    private function set($property, $arguments)
     {
         if (count($arguments) == 0) {
 
@@ -148,7 +159,7 @@ abstract class AbstractEntity implements Entity, Makeable, Jsonable
         }
 // @codeCoverageIgnoreEnd
 
-        $this->data[$property] = $arguments[0];
+        $this->data[$property] = $this->processInputValue($arguments[0], $property);
 
         return $this;
     }
@@ -166,6 +177,145 @@ abstract class AbstractEntity implements Entity, Makeable, Jsonable
         }
 
         return null;
+    }
+
+    /**
+     * @author WN
+     * @param mixed $value
+     * @param string|int $property
+     * @return mixed
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    private function processInputValue($value, $property)
+    {
+        if (array_key_exists($property, $this->properties)) {
+            $type = $this->properties[$property];
+            if ($this->isInternalType($type)) {
+
+                return $this->processInternalType($value, $type);
+            }
+
+            return $this->processObjectType($value, $type);
+        }
+
+        return $value;
+    }
+
+    /**
+     * @author WN
+     * @param $type
+     * @return bool
+     */
+    private function isInternalType($type)
+    {
+        return is_numeric($type) && array_key_exists($type, $this->propertyInternalTypes());
+    }
+
+    /**
+     * @author WN
+     * @param mixed $value
+     * @param int $type
+     * @return int|float|bool|string|array
+     * @throws InvalidArgumentException
+     */
+    private function processInternalType($value, $type)
+    {
+        if ($this->validateInternalType($value, $type)) {
+
+            return $type;
+        }
+
+        throw new InvalidArgumentException(
+            'Expected value to be type of [' . $this->propertyInternalTypes()[$type] .
+            '] type [' . $this->checkType($value) . '] was given'
+        );
+    }
+
+    /**
+     * @param mixed $value
+     * @param string $class
+     * @return object mixed
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    private function processObjectType($value, $class)
+    {
+        $this->classExists($class);
+
+        if (is_array($value) && is_subclass_of($class, 'WNowicki\Generic\Contracts\Makeable')) {
+
+            return $class::make($value);
+        }
+
+        if (is_a($value, $class)) {
+
+            return $value;
+        }
+
+        throw new InvalidArgumentException(
+            'Expected value to be object of [' . $class . '] type ' . $this->checkType($value) . '] was given'
+        );
+    }
+
+    private function classExists($class)
+    {
+        if (class_exists($class)) {
+            return true;
+        }
+        throw new Exception('Non existing class');
+    }
+
+    /**
+     * @author WN
+     * @param $value
+     * @param $type
+     * @return bool|null
+     */
+    private function validateInternalType($value, $type)
+    {
+        switch ($type) {
+            case self::TYPE_ARRAY:
+                return is_array($value);
+            case self::TYPE_INT:
+                return is_int($value);
+            case self::TYPE_STRING:
+                return is_string($value);
+            case self::TYPE_BOOL:
+                return is_bool($value);
+            case self::TYPE_FLOAT:
+                return is_float($value);
+        }
+    }
+
+    /**
+     * @author WN
+     * @return array
+     */
+    private function propertyInternalTypes()
+    {
+        return [
+            self::TYPE_ARRAY => 'array',
+            self::TYPE_INT => 'int',
+            self::TYPE_STRING => 'string',
+            self::TYPE_BOOL => 'bool',
+            self::TYPE_FLOAT => 'float',
+        ];
+    }
+
+    /**
+     * @author WN
+     * @param mixed $value
+     * @return string
+     */
+    private function checkType($value)
+    {
+        if (is_object($value)) {
+
+            return get_class($value);
+        }
+
+        return gettype($value);
     }
 
     /**

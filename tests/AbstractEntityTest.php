@@ -145,6 +145,129 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
     {
         throw new \Exception($errstr);
     }
+
+    public function testIntProperty()
+    {
+        $entity = new DummyEntity();
+
+        $this->assertInstanceOf('Tests\DummyEntity', $entity->setTwo(2));
+    }
+
+    public function testInvalidIntProperty()
+    {
+        $entity = new DummyEntity();
+
+        $this->setExpectedException(
+            'WNowicki\Generic\Exceptions\InvalidArgumentException',
+            'Expected value to be type of [int] type [string] was given'
+        );
+
+        $entity->setTwo('str');
+    }
+
+    public function testStringProperty()
+    {
+        $entity = new DummyEntity();
+
+        $this->assertInstanceOf('Tests\DummyEntity', $entity->setThree('str'));
+    }
+
+    public function testInvalidStringProperty()
+    {
+        $entity = new DummyEntity();
+
+        $this->setExpectedException(
+            'WNowicki\Generic\Exceptions\InvalidArgumentException');
+
+        $entity->setThree(1);
+    }
+
+    public function testBoolProperty()
+    {
+        $entity = new DummyEntity();
+
+        $this->assertInstanceOf('Tests\DummyEntity', $entity->setFour(true));
+    }
+
+    public function testInvalidBoolProperty()
+    {
+        $entity = new DummyEntity();
+
+        $this->setExpectedException(
+            'WNowicki\Generic\Exceptions\InvalidArgumentException');
+
+        $entity->setFour('true');
+    }
+
+    public function testFloatProperty()
+    {
+        $entity = new DummyEntity();
+
+        $this->assertInstanceOf('Tests\DummyEntity', $entity->setFive(5.5));
+    }
+
+    public function testInvalidFloatProperty()
+    {
+        $entity = new DummyEntity();
+
+        $this->setExpectedException(
+            'WNowicki\Generic\Exceptions\InvalidArgumentException');
+
+        $entity->setFive('true');
+    }
+
+    public function testArrayProperty()
+    {
+        $entity = new DummyEntity();
+
+        $this->assertInstanceOf('Tests\DummyEntity', $entity->setOne([]));
+    }
+
+    public function testInvalidArrayProperty()
+    {
+        $entity = new DummyEntity();
+
+        $this->setExpectedException('WNowicki\Generic\Exceptions\InvalidArgumentException');
+
+        $entity->setOne('str');
+    }
+
+    public function testObjectProperty()
+    {
+        $entity = new DummyEntity();
+
+        $this->assertInstanceOf('Tests\DummyEntity', $entity->setObj($entity));
+    }
+
+    public function testInvalidObjectProperty()
+    {
+        $entity = new DummyEntity();
+
+        $this->setExpectedException('WNowicki\Generic\Exceptions\InvalidArgumentException');
+
+        $entity->setObj('str');
+    }
+
+    public function testNonExistingClassProperty()
+    {
+        $entity = new DummyEntity();
+
+        $this->setExpectedException('WNowicki\Generic\Exception');
+
+        $entity->setObjTwo($entity);
+    }
+
+    public function testMakeMakableProperty()
+    {
+        $entity = DummyEntity::make([
+            'obj' => [
+                'field' => 'xxxxx',
+                'one'   => [],
+            ]
+        ]);
+
+        $this->assertInstanceOf('WNowicki\Generic\AbstractEntity', $entity->getObj());
+    }
 }
 
 class DummyEntity extends AbstractEntity
@@ -152,5 +275,12 @@ class DummyEntity extends AbstractEntity
     protected $properties = [
         'field',
         'test_field',
+        'one' => self::TYPE_ARRAY,
+        'two' => self::TYPE_INT,
+        'three' => self::TYPE_STRING,
+        'four' => self::TYPE_BOOL,
+        'five' => self::TYPE_FLOAT,
+        'obj' => 'Tests\DummyEntity',
+        'obj_two' => 'Tests\DummyEntitySecond',
     ];
 }
