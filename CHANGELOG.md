@@ -3,6 +3,12 @@
 - Testing
  - `AbstractEntityTest`
  - `ApiClientTest`
+- New contracts:
+ - `Arrayable`
+ - `Jsonable`
+ - `Makeable`
+- `AbstractEntity` improvements
+- Code coverage
 
 # v0.4.0
 2015-07-14
