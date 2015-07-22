@@ -159,7 +159,7 @@ abstract class AbstractEntity implements Entity, Makeable, Jsonable
         }
 // @codeCoverageIgnoreEnd
 
-        if ($arguments[0] == null) {
+        if ($arguments[0] === null) {
 
             $this->data[$property] = null;
             return $this;

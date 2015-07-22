@@ -165,11 +165,27 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
         $entity->setTwo('str');
     }
 
+    public function testGetIntProperty()
+    {
+        $entity = new DummyEntity();
+        $entity->setTwo(0);
+
+        $this->assertSame(0, $entity->getTwo());
+    }
+
     public function testStringProperty()
     {
         $entity = new DummyEntity();
 
         $this->assertInstanceOf('Tests\DummyEntity', $entity->setThree('str'));
+    }
+
+    public function testGetStringProperty()
+    {
+        $entity = new DummyEntity();
+        $entity->setThree('str');
+
+        $this->assertSame('str', $entity->getThree());
     }
 
     public function testInvalidStringProperty()
@@ -199,6 +215,14 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
         $entity->setFour('true');
     }
 
+    public function testGetBoolProperty()
+    {
+        $entity = new DummyEntity();
+        $entity->setFour(true);
+
+        $this->assertSame(true, $entity->getFour());
+    }
+
     public function testFloatProperty()
     {
         $entity = new DummyEntity();
@@ -216,6 +240,14 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
         $entity->setFive('true');
     }
 
+    public function testGetFloatProperty()
+    {
+        $entity = new DummyEntity();
+        $entity->setFive(5.5);
+
+        $this->assertSame(5.5, $entity->getFive());
+    }
+
     public function testArrayProperty()
     {
         $entity = new DummyEntity();
@@ -230,6 +262,25 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('WNowicki\Generic\Exceptions\InvalidArgumentException');
 
         $entity->setOne('str');
+    }
+
+    public function testGetArrayProperty()
+    {
+        $entity = new DummyEntity();
+        $entity->setOne([]);
+
+        $this->assertSame([], $entity->getOne());
+    }
+
+    public function testSetGetNull()
+    {
+        $entity = DummyEntity::make([]);
+
+        $this->assertNull($entity->getOne());
+
+        $entity->setFour(null);
+
+        $this->assertNull($entity->getFour());
     }
 
     public function testObjectProperty()
@@ -270,6 +321,20 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
     }
 }
 
+/**
+ * @method $this setOne(array $one)
+ * @method array|null getOne()
+ * @method $this setTwo(int $two)
+ * @method int|null getTwo()
+ * @method $this setThree(string $three)
+ * @method string|null getThree()
+ * @method $this setFour(bool $four)
+ * @method bool|null getFour()
+ * @method $this setFive(float $five)
+ * @method float|null getFive()
+ * @method $this setObj(DummyEntity $obj)
+ * @method DummyEntity|null getObj()
+ */
 class DummyEntity extends AbstractEntity
 {
     protected $properties = [
