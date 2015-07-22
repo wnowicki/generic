@@ -8,16 +8,16 @@
  * file that was distributed with this source code.
  */
 
-namespace WNowicki\Generic\ApiClient;
+namespace WNowicki\Generic\Exceptions;
+
+use WNowicki\Generic\Exception;
 
 /**
- * Error Response Exception
- *
- * Server returned standard error with meaningful message.
+ * Invalid Argument Exception
  *
  * @author WN
- * @package WNowicki\Generic\ApiClient
+ * @package WNowicki\Generic\Exceptions
  */
-class ErrorResponseException extends ApiClientException
+class InvalidArgumentException extends Exception
 {
 }

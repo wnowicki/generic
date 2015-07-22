@@ -8,22 +8,21 @@
  * file that was distributed with this source code.
  */
 
-namespace WNowicki\Generic;
+namespace WNowicki\Generic\Contracts;
 
 /**
- * Entity Interface
+ * Jsonable Interface
  *
- * @author  WN
- * @package WNowicki\Generic
+ * @author WN
+ * @package WNowicki\Generic\Contracts
  */
-interface EntityInterface
+interface Jsonable
 {
     /**
-     * To Array
+     * JSON representation of an object
      *
-     * Return flatten (arrays of scalars (+ null)???) representation of Entity
-     *
-     * @return array
+     * @param  int  $options
+     * @return string
      */
-    public function toArray();
+    public function toJson($options = 0);
 }

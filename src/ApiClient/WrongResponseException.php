@@ -10,8 +10,6 @@
 
 namespace WNowicki\Generic\ApiClient;
 
-use WNowicki\Generic\Exception;
-
 /**
  * Bad Response Exception
  *
@@ -20,6 +18,6 @@ use WNowicki\Generic\Exception;
  * @author WN
  * @package WNowicki\Generic\ApiClient
  */
-class BadResponseException extends Exception
+class WrongResponseException extends ApiClientException
 {
 }
