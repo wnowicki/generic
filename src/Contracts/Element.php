@@ -18,6 +18,7 @@ namespace WNowicki\Generic\Contracts;
  */
 interface Element
 {
+    const TYPE_GENERIC = 0;
     const TYPE_ARRAY = 1;
     const TYPE_BOOL = 2;
     const TYPE_INT = 4;

@@ -44,8 +44,10 @@ class ElementFactory
     private static function makeInternalType($type, $value)
     {
         if ($type == Element::TYPE_ARRAY) {
-
             return ArrayElement::make($value);
+        }
+        if ($type == Element::TYPE_GENERIC) {
+            return GenericElement::make($value);
         }
         return self::makeScalar($type, $value);
     }
@@ -59,12 +61,13 @@ class ElementFactory
     {
         if ($type == Element::TYPE_INT) {
             return IntElement::make($value);
-        } elseif ($type == Element::TYPE_FLOAT) {
-            return FloatElement::make($value);
-        } elseif ($type == Element::TYPE_BOOL) {
-            return BoolElement::make($value);
-        } else {
-            return StringElement::make($value);
         }
+        if ($type == Element::TYPE_FLOAT) {
+            return FloatElement::make($value);
+        }
+        if ($type == Element::TYPE_BOOL) {
+            return BoolElement::make($value);
+        }
+        return StringElement::make($value);
     }
 }
