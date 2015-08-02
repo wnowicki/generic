@@ -30,6 +30,11 @@ class ElementFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('WNowicki\Generic\Element\IntElement', ElementFactory::make(Element::TYPE_INT, 5));
     }
 
+    public function testMakeFloat()
+    {
+        $this->assertInstanceOf('WNowicki\Generic\Element\FloatElement', ElementFactory::make(Element::TYPE_FLOAT, 5.5));
+    }
+
     public function testMakeObject()
     {
         $this->assertInstanceOf('WNowicki\Generic\Element\ObjectElement', ElementFactory::make('\stdClass', null));

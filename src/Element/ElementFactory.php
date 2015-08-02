@@ -20,6 +20,12 @@ use WNowicki\Generic\Contracts\Element;
  */
 class ElementFactory
 {
+    /**
+     * @author WN
+     * @param $type
+     * @param $value
+     * @return Element
+     */
     public static function make($type, $value)
     {
         if (is_numeric($type)) {
@@ -30,6 +36,11 @@ class ElementFactory
         return ObjectElement::make($type, $value);
     }
 
+    /**
+     * @param $type
+     * @param $value
+     * @return Element
+     */
     private static function makeInternalType($type, $value)
     {
         if ($type == Element::TYPE_ARRAY) {
@@ -40,10 +51,17 @@ class ElementFactory
         return self::makeScalar($type, $value);
     }
 
+    /**
+     * @param $type
+     * @param $value
+     * @return Element
+     */
     private static function makeScalar($type, $value)
     {
         if ($type == Element::TYPE_INT) {
             return IntElement::make($value);
+        } elseif ($type == Element::TYPE_FLOAT) {
+            return FloatElement::make($value);
         }
     }
 }
