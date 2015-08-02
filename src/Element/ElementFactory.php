@@ -47,7 +47,6 @@ class ElementFactory
 
             return ArrayElement::make($value);
         }
-
         return self::makeScalar($type, $value);
     }
 
@@ -60,11 +59,14 @@ class ElementFactory
     {
         if ($type == Element::TYPE_INT) {
             return IntElement::make($value);
-        } elseif ($type == Element::TYPE_FLOAT) {
+        }
+        if ($type == Element::TYPE_FLOAT) {
             return FloatElement::make($value);
-        } elseif ($type == Element::TYPE_BOOL) {
+        }
+        if ($type == Element::TYPE_BOOL) {
             return BoolElement::make($value);
-        } elseif ($type == Element::TYPE_STRING) {
+        }
+        if ($type == Element::TYPE_STRING) {
             return StringElement::make($value);
         }
     }
