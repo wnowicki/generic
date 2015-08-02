@@ -45,4 +45,11 @@ class ObjectElementTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertSame('\stdClass', ObjectElement::make('\stdClass')->getType());
     }
+
+    public function testInvalidClass()
+    {
+        $this->setExpectedException('WNowicki\Generic\Exception');
+
+        ObjectElement::make('NonExistingClass');
+    }
 }
