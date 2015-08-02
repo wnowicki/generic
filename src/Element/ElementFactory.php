@@ -59,14 +59,11 @@ class ElementFactory
     {
         if ($type == Element::TYPE_INT) {
             return IntElement::make($value);
-        }
-        if ($type == Element::TYPE_FLOAT) {
+        } elseif ($type == Element::TYPE_FLOAT) {
             return FloatElement::make($value);
-        }
-        if ($type == Element::TYPE_BOOL) {
+        } elseif ($type == Element::TYPE_BOOL) {
             return BoolElement::make($value);
-        }
-        if ($type == Element::TYPE_STRING) {
+        } else ($type == Element::TYPE_STRING) {
             return StringElement::make($value);
         }
     }
