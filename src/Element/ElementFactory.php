@@ -63,7 +63,7 @@ class ElementFactory
             return FloatElement::make($value);
         } elseif ($type == Element::TYPE_BOOL) {
             return BoolElement::make($value);
-        } else ($type == Element::TYPE_STRING) {
+        } else {
             return StringElement::make($value);
         }
     }
