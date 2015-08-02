@@ -43,6 +43,14 @@ class ElementFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('WNowicki\Generic\Element\BoolElement', ElementFactory::make(Element::TYPE_BOOL, true));
     }
 
+    public function testMakeString()
+    {
+        $this->assertInstanceOf(
+            'WNowicki\Generic\Element\StringElement',
+            ElementFactory::make(Element::TYPE_STRING, 'fgh')
+        );
+    }
+
     public function testMakeObject()
     {
         $this->assertInstanceOf('WNowicki\Generic\Element\ObjectElement', ElementFactory::make('\stdClass', null));
