@@ -11,20 +11,36 @@
 namespace WNowicki\Generic\Element;
 
 /**
- * IntElement
+ * Array Element
  *
  * @author WN
  * @package WNowicki\Generic\Element
  */
-abstract class AbstractScalarElement extends AbstractElement
+class ArrayElement extends AbstractElement
 {
     /**
-     * @param int|string|float|bool $value
-     * @return static
+     * @param array $value
+     * @return $this
      * @throws \WNowicki\Generic\Exceptions\InvalidArgumentException
      */
     public static function make($value)
     {
-        return (new static())->setValue($value);
+        return (new self())->setValue($value);
+    }
+
+    /**
+     * Checks if $value is valid type for Element
+     *
+     * @param mixed $value
+     * @return bool
+     */
+    public function isValid($value)
+    {
+        return is_array($value);
+    }
+
+    public function getType()
+    {
+        return self::TYPE_ARRAY;
     }
 }

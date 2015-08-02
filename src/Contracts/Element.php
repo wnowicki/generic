@@ -25,12 +25,26 @@ interface Element
     const TYPE_FLOAT = 16;
 
     /**
+     * @param mixed $value
+     * @return $this
+     */
+    public function setValue($value);
+
+    /**
+     * @return mixed
+     */
+    public function getValue();
+
+    /**
      * Checks if $value is valid type for Element
      *
      * @param mixed $value
      * @return bool
      */
-    public static function isValid($value);
+    public function isValid($value);
 
+    /**
+     * @return int|string
+     */
     public function getType();
 }

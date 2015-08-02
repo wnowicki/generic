@@ -11,36 +11,38 @@
 namespace Tests\Element;
 
 use WNowicki\Generic\Contracts\Element;
-use WNowicki\Generic\Element\IntElement;
+use WNowicki\Generic\Element\ObjectElement;
 
 /**
- * Int Element Test
+ * Object Element Test
  *
  * @author WN
  * @package Tests\Element
  */
-class IntElementTest extends \PHPUnit_Framework_TestCase
+class ObjectElementTest extends \PHPUnit_Framework_TestCase
 {
     public function testMake()
     {
-        $this->assertInstanceOf('WNowicki\Generic\Contracts\Element', IntElement::make(1));
-        $this->assertInstanceOf('WNowicki\Generic\Element\IntElement', IntElement::make(1));
+        $this->assertInstanceOf('WNowicki\Generic\Contracts\Element', ObjectElement::make('\stdClass'));
+        $this->assertInstanceOf('WNowicki\Generic\Element\ObjectElement', ObjectElement::make('\stdClass'));
     }
 
     public function testWrongType()
     {
         $this->setExpectedException('WNowicki\Generic\Exceptions\InvalidArgumentException');
 
-        IntElement::make('test');
+        ObjectElement::make('\stdClass', []);
     }
 
     public function testGetValue()
     {
-        $this->assertSame(345, IntElement::make(345)->getValue());
+        $obj = new \stdClass();
+
+        $this->assertSame($obj, ObjectElement::make('\stdClass', $obj)->getValue());
     }
 
     public function testGetType()
     {
-        $this->assertSame(Element::TYPE_INT, IntElement::make(1)->getType());
+        $this->assertSame('\stdClass', ObjectElement::make('\stdClass')->getType());
     }
 }

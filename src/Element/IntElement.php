@@ -24,7 +24,7 @@ class IntElement extends AbstractScalarElement
      * @param mixed $value
      * @return bool
      */
-    public static function isValid($value)
+    public function isValid($value)
     {
         return is_int($value);
     }

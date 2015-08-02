@@ -28,7 +28,7 @@ abstract class AbstractElement implements Element
      * @return $this
      * @throws InvalidArgumentException
      */
-    public function set($value)
+    public function setValue($value)
     {
         if ($this->isValid($value)) {
 
@@ -42,7 +42,7 @@ abstract class AbstractElement implements Element
     /**
      * @return mixed
      */
-    public function get()
+    public function getValue()
     {
         return $this->value;
     }
